@@ -3,6 +3,8 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 
 export interface ListaUsuarioProps {
   usuarios: Usuario[]; //array de usuarios e do tipo Usuario
+  removerUsuario: (usuario: Usuario) => void; //passa o usuario para o Cadastro - comunicação indireta
+  selecionarUsuario: (usuario: Usuario) => void; //passa o usuario para o Cadastro - comunicação indireta
 }
 
 export default function ListaUsuario(props: ListaUsuarioProps) {
@@ -14,13 +16,13 @@ export default function ListaUsuario(props: ListaUsuarioProps) {
             </div>
             
             <div className="flex gap-2">
-                <button className="botao azul" ><FaEdit/></button>
-                <button className="botao vermelho" ><FaTrash/></button>
+                <button className="botao azul" onClick={() => props.selecionarUsuario(usuario)}><FaEdit/></button>
+                <button className="botao vermelho" onClick={() => props.removerUsuario(usuario)}><FaTrash/></button>
             </div>
         </div>
     }
-    return ( 
-    <ul className="flex flex-col gap-2">
+    return ( //este map transforma uma lista de usuarios em uma de <li>
+    <ul className="flex flex-col gap-2"> 
         {props.usuarios.map((usuario) => {
             return <li key={usuario.id}>
                 {renderizarUsuarios(usuario)}
@@ -29,3 +31,5 @@ export default function ListaUsuario(props: ListaUsuarioProps) {
     </ul>
     );
 }
+//onClick precisa estar em um componente use Client, que roda do lado do usuarios, porém como o componente pai de ListaUsuario já é use Client, não é necessário
+//o botão de remover usuario chama a função removerUsuario do componente pai, passando o usuario que deve ser removido
